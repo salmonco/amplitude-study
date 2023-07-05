@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useForm } from "react-hook-form";
 import { server } from '../utils/server'; 
 import { postData } from '../utils/services'; 
+import * as amplitude from '@amplitude/analytics-browser';
 
 type LoginMail = {
   email: string;
@@ -13,12 +14,16 @@ const LoginPage = () => {
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = async (data: LoginMail) => {
-    const res = await postData(`${server}/api/login`, {
-      email: data.email,
-      password: data.password
-    });
-
-    console.log(res);
+    try {
+      const res = await postData(`${server}/api/login`, {
+        email: data.email,
+        password: data.password
+      });
+      console.log(res);
+      amplitude.setUserId(res.id)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

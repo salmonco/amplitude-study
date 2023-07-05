@@ -8,6 +8,7 @@ import { addProduct } from 'store/reducers/cart';
 import { toggleFavProduct } from 'store/reducers/user';
 import { ProductType, ProductStoreType } from 'types';
 import { RootState } from 'store';
+import { track } from '@amplitude/analytics-browser';
 
 type ProductContent = {
   product: ProductType;
@@ -34,6 +35,14 @@ const Content = ({ product }: ProductContent) => {
   }
 
   const addToCart = () => {
+    track('click_add_to_cart', {
+      productId: product.id,
+      productName: product.name,
+      productPrice: product.currentPrice,
+      productColor: color,
+      productSize: itemSize
+    })
+
     const productToSave: ProductStoreType = { 
       id: product.id,
       name: product.name,

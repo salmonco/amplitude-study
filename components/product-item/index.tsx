@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavProduct } from 'store/reducers/user';
 import { RootState } from 'store';
 import { ProductTypeList } from 'types';
+import { track } from '@amplitude/analytics-browser';
 
 const ProductItem = ({ discount, images, id, name, price, currentPrice }: ProductTypeList) => {
   const dispatch = useDispatch();
@@ -19,8 +20,12 @@ const ProductItem = ({ discount, images, id, name, price, currentPrice }: Produc
     ))
   }
 
+  const handleClick = () => {
+    track('click_product_detail')
+  }
+
   return (
-    <div className="product-item">
+    <div onClick={handleClick} className="product-item">
       <div className="product__image">
         <button type="button" onClick={toggleFav} className={`btn-heart ${isFavourite ? 'btn-heart--active' : ''}`}><i className="icon-heart"></i></button>
 
